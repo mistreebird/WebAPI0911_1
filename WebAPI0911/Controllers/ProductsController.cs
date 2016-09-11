@@ -75,6 +75,37 @@ namespace WebAPI0911.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        // PUT: api/Products/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PatchProduct(int id, ProductPatchViewModel product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            ;
+            var item = db.Product.Find(id);
+            item.Price = product.Price;
+            item.Stock = product.Stock;
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return Ok(item);
+        }
+
         // POST: api/Products
         [ResponseType(typeof(Product))]
         public IHttpActionResult PostProduct(Product product)
