@@ -48,6 +48,52 @@ namespace WebAPI0911.Controllers
             return Ok(orders);
         }
 
+        // GET: api/clients/{id}/orders/1
+        [Route("api/clients/{id}/orders/{orderId}")]
+        public IHttpActionResult GetClientOrders(int id,int orderId)
+        {
+            var order = db.Order.Where(p => p.ClientId == id && p.OrderId == orderId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
+
+        // GET: api/clients/{id}/orders/pending
+        [Route("api/clients/{id}/orders/pending")]
+        public IHttpActionResult GetClientOrdersPending(int id)
+        {
+            var order = db.Order.Where(p => p.ClientId == id && p.OrderStatus == "P");
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
+
+        // GET: api/clients/1/orders/2001/05/27
+        [Route("api/clients/{id}/orders/{*date}")]
+        public IHttpActionResult GetClientOrdersbyDate(int id,DateTime date)
+        {
+            var order = db.Order.Where(p => p.ClientId == id 
+            && p.OrderDate.Value.Year == date.Year
+            && p.OrderDate.Value.Month == date.Month
+            && p.OrderDate.Value.Day == date.Day
+            );
+
+            if (order == null || order.Count() ==0 )
+            {
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
+
         // PUT: api/Clients/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutClient(int id, Client client)
