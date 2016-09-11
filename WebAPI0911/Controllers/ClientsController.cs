@@ -42,6 +42,72 @@ namespace WebAPI0911.Controllers
             return Ok(client);
         }
 
+        // GET: api/Clients/5
+        [ResponseType(typeof(Client))]
+        [Route("~/clients/type2/{id}")]
+        public Client GetClientType2(int id)
+        {
+            return db.Client.Find(id);
+        }
+
+        // GET: api/Clients/5
+        [ResponseType(typeof(Client))]
+        [Route("~/clients/type3/{id}")]
+        public IHttpActionResult GetClientType3(int id)
+        {
+            return Json(db.Client.Find(id));
+        }
+
+        [Route("~/clients/type4/{id:int}")]
+        public HttpResponseMessage GetClientType4(int id)
+        {
+            var data = db.Client.Find(id);
+
+            return Request.CreateResponse(HttpStatusCode.OK, data);
+        }
+
+        [Route("~/clients/type5/{id:int}")]
+        public HttpResponseMessage GetClientType5(int id)
+        {
+            var data = db.Client.Find(id);
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ObjectContent<Client>(data,
+                    GlobalConfiguration.Configuration.Formatters.JsonFormatter)
+            };
+        }
+
+        [Route("~/clients/type6/{id:int}")]
+        public HttpResponseMessage GetClientType6(int id)
+        {
+            var data = db.Client.Find(id);
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                ReasonPhrase = "Hello World",
+                Content = new ObjectContent<Client>(data,
+                    GlobalConfiguration.Configuration.Formatters.JsonFormatter)
+            };
+        }
+
+        [Route("~/clients/type7/{id:int}")]
+        public HttpResponseMessage GetClientType7(int id)
+        {
+            var data = db.Client.Find(id);
+
+            var res = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                ReasonPhrase = "Hello World",
+                Content = new ObjectContent<Client>(data,
+                    GlobalConfiguration.Configuration.Formatters.JsonFormatter)
+            };
+
+            res.Headers.Add("X-JobId", "1");
+
+            return res;
+        }
+
         // GET: api/clients/{id}/orders
         [Route("{id}/orders")]
         public IHttpActionResult GetClientOrders(int id)
