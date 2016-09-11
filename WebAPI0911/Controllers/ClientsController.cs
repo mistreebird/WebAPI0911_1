@@ -12,6 +12,7 @@ using WebAPI0911.Models;
 
 namespace WebAPI0911.Controllers
 {
+    [RoutePrefix("api/clients")]
     public class ClientsController : ApiController
     {
         private FabricsEntities db = new FabricsEntities();
@@ -41,7 +42,7 @@ namespace WebAPI0911.Controllers
         }
 
         // GET: api/clients/{id}/orders
-        [Route("api/clients/{id}/orders")]
+        [Route("{id}/orders")]
         public IHttpActionResult GetClientOrders(int id)
         {
             var orders = db.Order.Where(p => p.ClientId == id);
@@ -49,7 +50,7 @@ namespace WebAPI0911.Controllers
         }
 
         // GET: api/clients/{id}/orders/1
-        [Route("api/clients/{id}/orders/{orderId}")]
+        [Route("{id}/orders/{orderId}")]
         public IHttpActionResult GetClientOrders(int id,int orderId)
         {
             var order = db.Order.Where(p => p.ClientId == id && p.OrderId == orderId);
@@ -63,7 +64,7 @@ namespace WebAPI0911.Controllers
         }
 
         // GET: api/clients/{id}/orders/pending
-        [Route("api/clients/{id}/orders/pending")]
+        [Route("{id}/orders/pending")]
         public IHttpActionResult GetClientOrdersPending(int id)
         {
             var order = db.Order.Where(p => p.ClientId == id && p.OrderStatus == "P");
@@ -77,7 +78,7 @@ namespace WebAPI0911.Controllers
         }
 
         // GET: api/clients/1/orders/2001/05/27
-        [Route("api/clients/{id}/orders/{*date}")]
+        [Route("{id}/orders/{*date}")]
         public IHttpActionResult GetClientOrdersbyDate(int id,DateTime date)
         {
             var order = db.Order.Where(p => p.ClientId == id 
