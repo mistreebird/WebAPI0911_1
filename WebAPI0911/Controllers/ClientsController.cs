@@ -12,7 +12,7 @@ using WebAPI0911.Models;
 
 namespace WebAPI0911.Controllers
 {
-    [RoutePrefix("api/clients")]
+    [RoutePrefix("clients")]
     public class ClientsController : ApiController
     {
         private FabricsEntities db = new FabricsEntities();
@@ -30,6 +30,7 @@ namespace WebAPI0911.Controllers
 
         // GET: api/Clients/5
         [ResponseType(typeof(Client))]
+        [Route("{id}",Name = "GetOrderById")]
         public IHttpActionResult GetClient(int id)
         {
             Client client = db.Client.Find(id);
@@ -132,6 +133,7 @@ namespace WebAPI0911.Controllers
 
         // POST: api/Clients
         [ResponseType(typeof(Client))]
+        [Route("")]
         public IHttpActionResult PostClient(Client client)
         {
             if (!ModelState.IsValid)
@@ -142,7 +144,7 @@ namespace WebAPI0911.Controllers
             db.Client.Add(client);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = client.ClientId }, client);
+            return CreatedAtRoute("GetOrderById", new { id = client.ClientId }, client);
         }
 
         // DELETE: api/Clients/5
